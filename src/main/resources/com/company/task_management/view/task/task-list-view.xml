@@ -34,15 +34,14 @@
             <properties include=".*"/>
         </genericFilter>
         <hbox id="buttonsPanel" classNames="buttons-panel">
-            <button id="createBtn" action="tasksDataGrid.create"/>
-            <button id="editBtn" action="tasksDataGrid.edit"/>
-            <button id="removeBtn" action="tasksDataGrid.remove"/>
+            <!--            <button id="createBtn" action="tasksDataGrid.create"/>-->
+            <!--            <button id="editBtn" action="tasksDataGrid.edit"/>-->
+            <!--            <button id="removeBtn" action="tasksDataGrid.remove"/>-->
             <button id="importTasksBtn" icon="ADD_DOCK" text="msg://importTasksBtn.text"/>
             <fileStorageUploadField id="uploadTasksFromFileBtn"
                                     uploadIcon="UPLOAD"
                                     uploadText="msg://uploadTasksFromFileBtn"
                                     fileStoragePutMode="MANUAL"/>
-
             <simplePagination id="pagination" dataLoader="tasksDl"/>
         </hbox>
         <dataGrid id="tasksDataGrid"
@@ -62,6 +61,9 @@
                 <column property="assignee"/>
                 <column property="project"/>
                 <column property="priority"/>
+                <column property="label"/>
+                <column property="estimatedEfforts"/>
+                <column property="closed"/>
             </columns>
         </dataGrid>
         <hbox id="lookupActions" visible="false">

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <view xmlns="http://jmix.io/schema/flowui/view"
       title="msg://projectTasksBrowser.title">
-
     <data>
         <collection id="tasksDc" class="com.company.task_management.entity.Task">
             <fetchPlan extends="_base">
@@ -25,8 +24,10 @@
                 <column property="priority"/>
                 <column property="assignee"/>
                 <column property="project"/>
+                <column property="label"/>
+                <column property="estimatedEfforts"/>
+                <column property="closed"/>
             </columns>
         </dataGrid>
-
     </layout>
 </view>

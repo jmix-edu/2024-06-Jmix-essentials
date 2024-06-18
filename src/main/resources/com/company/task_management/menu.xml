@@ -8,6 +8,9 @@
         <item view="tm_TimeEntry.list"
               title="msg://com.company.task_management.view.timeentry/timeEntryListView.title"/>
         <item view="tm_Document.list" title="msg://com.company.task_management.view.document/documentListView.title"/>
+        <item view="tm_ProjectStatsView"
+              title="msg://com.company.task_management.view.projectstats/projectStatsView.title"/>
+        <item view="tm_WorkloadView" title="msg://com.company.task_management.view.workload/workloadView.title"/>
     </menu>
 
 </menu-config>

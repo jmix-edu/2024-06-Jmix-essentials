@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,7 +32,7 @@ public class TimeEntry {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Task task;
 
-    @Positive
+    @Positive(message = "Spent time ${validatedValue} cannot be less or equal zero")
     @Column(name = "TIME_SPENT", nullable = false)
     @NotNull
     private Integer timeSpent;
@@ -46,6 +47,7 @@ public class TimeEntry {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
+    @Length(message = "{msg://com.company.task_management.entity/TimeEntry.description.validation.Length}", min = 15)
     @Column(name = "DESCRIPTION")
     @Lob
     private String description;

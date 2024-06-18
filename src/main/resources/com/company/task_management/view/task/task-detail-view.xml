@@ -36,6 +36,9 @@
                 </actions>
             </entityPicker>
             <select id="priorityField" property="priority"/>
+            <comboBox id="labelField" property="label"/>
+            <textField id="estimatedEffortsField" property="estimatedEfforts"/>
+            <checkbox id="closedField" property="closed"/>
         </formLayout>
         <hbox id="detailActions">
             <button id="saveAndCloseBtn" action="saveAction"/>
