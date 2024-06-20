@@ -1,5 +1,6 @@
 package com.company.task_management.entity;
 
+import com.company.task_management.listener.TaskJpaListener;
 import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
@@ -7,13 +8,16 @@ import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.entity.annotation.OnDeleteInverse;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.annotation.JmixProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -24,6 +28,7 @@ import java.util.UUID;
         @Index(name = "IDX_TM_TASK_UNQ_NAME", columnList = "NAME")
 })
 @Entity(name = "tm_Task")
+@EntityListeners(TaskJpaListener.class)
 public class Task {
     @JmixGeneratedValue
     @Column(name = "ID", nullable = false)
@@ -74,9 +79,32 @@ public class Task {
     @Column(name = "ESTIMATED_EFFORTS")
     private Integer estimatedEfforts;
 
+    @Column(name = "START_DATE")
+    private LocalDateTime startDate;
+
     @Column(name = "CLOSED", nullable = false)
     @NotNull
     private Boolean closed = false;
+
+    @JmixProperty
+    @Transient
+    private LocalDateTime supposedEndDate;
+
+    public LocalDateTime getSupposedEndDate() {
+        return supposedEndDate;
+    }
+
+    public void setSupposedEndDate(LocalDateTime supposedEndDate) {
+        this.supposedEndDate = supposedEndDate;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
 
     public Boolean getClosed() {
         return closed;
@@ -180,5 +208,17 @@ public class Task {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @PostLoad
+    public void postLoad() {
+
+        if (estimatedEfforts != null) {
+            supposedEndDate = startDate != null
+                    ? startDate
+                    : LocalDateTime.of(LocalDate.now(), LocalTime.NOON);
+            supposedEndDate = supposedEndDate.plusHours(estimatedEfforts);
+        }
+
     }
 }

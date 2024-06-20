@@ -9,11 +9,21 @@
                 <property name="manager" fetchPlan="_base"/>
                 <property name="participants" fetchPlan="_base"/>
                 <property name="tasks" fetchPlan="_base"/>
+                <property name="owner" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
             <collection id="participantsDc" property="participants"/>
             <collection id="tasksDc" property="tasks"/>
         </instance>
+        <collection id="customersDc" class="com.company.task_management.entity.Customer">
+            <loader id="customersDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from tm_Customer e]]>
+                </query>
+            </loader>
+            <fetchPlan extends="_base"/>
+        </collection>
+
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -38,6 +48,12 @@
             <textField id="projectLabelsField" property="projectLabels" readOnly="true"/>
             <datePicker id="startDateField" property="startDate"/>
             <datePicker id="endDateField" property="endDate"/>
+            <entityPicker id="ownerField" property="owner" readOnly="false">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
         </formLayout>
         <h3 text="Paticipants"/>
         <hbox id="participantsButtonsPanel" classNames="buttons-panel">

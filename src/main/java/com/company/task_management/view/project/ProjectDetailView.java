@@ -4,13 +4,14 @@ import com.company.task_management.app.ProjectsService;
 import com.company.task_management.datatype.ProjectLabels;
 import com.company.task_management.entity.Project;
 import com.company.task_management.view.main.MainView;
+import com.company.task_management.view.user.UserListView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.validation.group.UiComponentChecks;
-import io.jmix.core.validation.group.UiCrossFieldChecks;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.textfield.TypedTextField;
+import io.jmix.flowui.component.validation.group.UiCrossFieldChecks;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
 import jakarta.validation.ConstraintViolation;
@@ -48,6 +49,11 @@ public class ProjectDetailView extends StandardDetailView<Project> {
         projectLabelsField.setReadOnly(false);
 
         event.getEntity().setProjectLabels(new ProjectLabels(List.of("bug", "enhancement", "task")));
+    }
+
+    @Install(to = "participantsDataGrid.add", subject = "viewConfigurer")
+    private void participantsDataGridAddViewConfigurer(final UserListView userListView) {
+        userListView.setFilterProject(getEditedEntity());
     }
 
     @Subscribe(id = "commitWithBeanValidation", subject = "clickListener")

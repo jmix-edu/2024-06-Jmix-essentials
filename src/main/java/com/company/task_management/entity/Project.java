@@ -1,14 +1,13 @@
 package com.company.task_management.entity;
 
 import com.company.task_management.datatype.ProjectLabels;
-import com.company.task_management.validaion.ProjectLabelsSize;
 import com.company.task_management.validaion.ValidDatesProject;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.metamodel.annotation.Composition;
-import io.jmix.core.metamodel.annotation.InstanceName;
-import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.entity.annotation.SystemLevel;
+import io.jmix.core.metamodel.annotation.*;
+import io.jmix.pessimisticlock.annotation.PessimisticLock;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +17,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@PessimisticLock(timeoutSec = 10)
 @ValidDatesProject
 @JmixEntity
 @Table(name = "TM_PROJECT", indexes = {
@@ -39,6 +39,9 @@ public class Project {
     @Column(name = "NAME", nullable = false)
     @NotNull
     private String name;
+
+    @Column(name = "TOTAL_ESTIMATED_EFFORTS")
+    private Integer totalEstimatedEfforts;
 
     @Column(name = "DESCRIPTION")
     @Lob
@@ -74,7 +77,7 @@ public class Project {
     //  @PropertyDatatype("projectLabels")
     @Column(name = "PROJECT_LABELS")
 //    @Convert(converter = ProjectLabelsConverter.class)
-    @ProjectLabelsSize(min = 3, max = 5)
+//    @ProjectLabelsSize(min = 3, max = 5)
     private ProjectLabels projectLabels;
 
     @DeletedBy
@@ -90,6 +93,47 @@ public class Project {
 
     @Column(name = "END_DATE")
     private LocalDate endDate;
+
+    @SystemLevel
+    @Column(name = "OWNER_ID")
+    private UUID ownerId;
+
+    @DependsOnProperties({"ownerId"})
+    @JmixProperty
+    @Transient
+    private Customer owner;
+
+    @Column(name = "VERSION", nullable = false)
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public UUID getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(UUID ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Integer getTotalEstimatedEfforts() {
+        return totalEstimatedEfforts;
+    }
+
+    public void setTotalEstimatedEfforts(Integer totalEstimatedEfforts) {
+        this.totalEstimatedEfforts = totalEstimatedEfforts;
+    }
 
     public LocalDate getEndDate() {
         return endDate;

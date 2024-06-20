@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="tm">
+        <createTable tableName="TM_ORDER">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TM_ORDER"/>
+            </column>
+            <column name="ORDER_NUMBER" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DATE_" type="DATE"/>
+            <column name="CUSTOMER_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="tm">
+        <createIndex indexName="IDX_TM_ORDER_CUSTOMER" tableName="TM_ORDER">
+            <column name="CUSTOMER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="CUSTOMER_ID" baseTableName="TM_ORDER"
+                                 constraintName="FK_TM_ORDER_ON_CUSTOMER" referencedColumnNames="ID"
+                                 referencedTableName="TM_CUSTOMER"/>
+    </changeSet>
+</databaseChangeLog>

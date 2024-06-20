@@ -1,11 +1,14 @@
 package com.company.task_management.view.task;
 
 import com.company.task_management.app.TasksImportService;
+import com.company.task_management.entity.Project;
 import com.company.task_management.entity.Task;
 import com.company.task_management.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.upload.Receiver;
 import com.vaadin.flow.router.Route;
+import io.jmix.core.DataManager;
+import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.upload.FileStorageUploadField;
 import io.jmix.flowui.component.upload.receiver.FileTemporaryStorageBuffer;
 import io.jmix.flowui.kit.component.button.JmixButton;
@@ -41,6 +44,10 @@ public class TaskListView extends StandardListView<Task> {
     private DataContext dataContext;
     @ViewComponent
     private CollectionContainer<Task> tasksDc;
+    @Autowired
+    private DataManager dataManager;
+    @Autowired
+    private Notifications notifications;
 
     @Subscribe(id = "importTasksBtn", subject = "clickListener")
     public void onImportTasksBtnClick(final ClickEvent<JmixButton> event) {
@@ -72,4 +79,17 @@ public class TaskListView extends StandardListView<Task> {
             tasksDc.getMutableItems().add(task);
         }
     }
+
+    @Subscribe
+    public void onInit(final InitEvent event) {
+        Task task = dataManager.load(Task.class)
+                .all()
+                .one();
+
+        Project project = task.getProject();
+
+        notifications.show(project.getName());
+    }
+    
+    
 }
